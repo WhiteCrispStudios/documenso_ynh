@@ -1,1 +1,1 @@
-Admin: Documenso läuft in Docker. Konfiguration über das YunoHost-Config-Panel (SMTP).
+Admin: Documenso läuft in Docker. Konfiguration über das YunoHost-Config-Panel (SMTP). Hinweis: Bei YunoHost-Postfix meist 127.0.0.1:25 (nicht localhost).
