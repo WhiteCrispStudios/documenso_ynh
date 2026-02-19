@@ -1,0 +1,1 @@
+Dokuseal – Self‑hosted e‑signature platform (Docker).

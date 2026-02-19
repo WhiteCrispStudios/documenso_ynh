@@ -1,0 +1,74 @@
+packaging_format = 2
+
+id = "documenso"
+name = "Documenso"
+description.en = "Open-source document signing"
+description.fr = "Signature de documents open source"
+version = "0.1.0~ynh1"
+maintainers = ["WhiteCrispStudios <whitecrispstudios@yahoo.com>"]
+
+[upstream]
+license = "AGPL-3.0"
+website = "https://documenso.com"
+code = "https://github.com/documenso/documenso"
+
+[integration]
+yunohost = ">= 11.2.4"
+architectures = ["amd64", "arm64"]
+multi_instance = true
+ldap = "not_relevant"
+sso = "not_relevant"
+disk = "500M"
+ram.build = "50M"
+ram.runtime = "200M"
+
+[install]
+  [install.domain]
+  type = "domain"
+
+  [install.path]
+  type = "path"
+  default = "/sign"
+
+  [install.app_port]
+  type = "number"
+  default = 3900
+  min = 1
+  max = 65535
+
+  [install.smtp_host]
+  type = "string"
+  optional = true
+  help = "SMTP Host (z. B. localhost)"
+
+  [install.smtp_port]
+  type = "number"
+  default = 587
+  optional = true
+  min = 1
+  max = 65535
+  help = "SMTP Port (z. B. 587)"
+
+  [install.smtp_user]
+  type = "string"
+  optional = true
+  help = "SMTP Benutzer (z. B. sign@example.com)"
+
+  [install.smtp_pass]
+  type = "password"
+  optional = true
+  help = "SMTP Passwort der Mailbox"
+
+  [install.smtp_from]
+  type = "string"
+  optional = true
+  help = "Absenderadresse (From)"
+
+[resources]
+  [resources.system_user]
+  [resources.install_dir]
+  [resources.data_dir]
+  [resources.permissions]
+    main.url = "/"
+    main.allowed = "visitors"
+    main.auth_header = false

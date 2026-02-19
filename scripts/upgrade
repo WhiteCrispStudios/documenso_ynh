@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+source /usr/share/yunohost/helpers
+source ./_common.sh
+
+app=${app:?}
+install_dir=$(ynh_app_setting_get --app="$app" --key=install_dir)
+app_domain=$(ynh_app_setting_get --app="$app" --key=domain)
+
+cd "$install_dir"
+if command -v docker-compose >/dev/null 2>&1; then
+  docker-compose pull
+  docker-compose up -d
+else
+  docker compose pull
+  docker compose up -d
+fi
+
+# ensure ssowat is disabled for this domain (public app)
+ynh_disable_ssowat_for_domain "$app_domain"

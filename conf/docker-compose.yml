@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  documenso:
+    image: documenso/documenso:latest
+    container_name: documenso__APP__
+    restart: unless-stopped
+    environment:
+      - WORKDIR=/data
+      - APP_URL=__APP_URL__
+      - SMTP_HOST=__SMTP_HOST__
+      - SMTP_PORT=__SMTP_PORT__
+      - SMTP_USER=__SMTP_USER__
+      - SMTP_PASS=__SMTP_PASS__
+      - SMTP_FROM=__SMTP_FROM__
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - __DATA_DIR__:/data
+    ports:
+      - "127.0.0.1:__APP_PORT__:3000"

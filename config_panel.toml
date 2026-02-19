@@ -1,0 +1,32 @@
+version = "1.0"
+
+[main]
+name = "Docuseal"
+
+    [main.smtp]
+    name = "SMTP"
+
+        [main.smtp.smtp_host]
+        ask = "SMTP Host (z. B. localhost)"
+        type = "string"
+        optional = true
+
+        [main.smtp.smtp_port]
+        ask = "SMTP Port (z. B. 587)"
+        type = "number"
+        optional = true
+
+        [main.smtp.smtp_user]
+        ask = "SMTP Benutzer (z. B. sign@example.com)"
+        type = "string"
+        optional = true
+
+        [main.smtp.smtp_pass]
+        ask = "SMTP Passwort (Mailbox)"
+        type = "password"
+        optional = true
+
+        [main.smtp.smtp_from]
+        ask = "Absenderadresse (From)"
+        type = "string"
+        optional = true

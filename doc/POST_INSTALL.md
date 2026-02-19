@@ -1,0 +1,1 @@
+Öffne die App-URL und erstelle den Admin-Account. Danach kannst du Signatur-Templates anlegen.

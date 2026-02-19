@@ -1,0 +1,1 @@
+Ouvrez l'URL de l'app et créez le compte admin. Ensuite, vous pouvez créer des modèles de signature.

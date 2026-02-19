@@ -1,0 +1,1 @@
+Docuseal – plateforme de signature électronique auto‑hébergée (Docker).
