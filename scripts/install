@@ -94,6 +94,15 @@ cat ../conf/docker-compose.yml \
 # nginx proxy
 ynh_add_nginx_config
 
+# If app is installed at root, remove the redirect block to avoid loops
+if [ "$app_path" = "/" ]; then
+  app_conf="/etc/nginx/conf.d/${app_domain}.d/${app}.conf"
+  if [ -f "$app_conf" ]; then
+    sed -i '/location = \/ {/,/}/d' "$app_conf"
+    systemctl reload nginx
+  fi
+fi
+
 # ensure ssowat is disabled for this domain (public app)
 ynh_disable_ssowat_for_domain "$app_domain"
 
