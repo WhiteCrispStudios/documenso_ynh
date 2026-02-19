@@ -4,7 +4,7 @@ This app runs Documenso in Docker with a path-based reverse proxy.
 
 ## Notes
 - Install path e.g. `/sign` (or install at root `/` on its own subdomain)
-- Optional SMTP (config panel). Hinweis: Bei YunoHost-Postfix meist **127.0.0.1:25** (nicht localhost)
+- Optional SMTP (config panel). Hinweis: bei Docker muss SMTP **über den Host** erreichbar sein → `host.docker.internal:25` (mit extra_hosts gesetzt). `127.0.0.1` funktioniert im Container nicht.
 - Postgres is bundled via Docker (no external DB needed)
 - SSO disabled on the app's domain (required for public access on some setups)
 

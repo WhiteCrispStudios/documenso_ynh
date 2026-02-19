@@ -13,7 +13,7 @@ if [[ "$app_path" != /* ]]; then app_path="/$app_path"; fi
 app_port=${app_port}
 
 smtp_transport=${smtp_transport:-"smtp-auth"}
-smtp_host=${smtp_host:-""}
+smtp_host=${smtp_host:-"host.docker.internal"}
 smtp_port=${smtp_port:-""}
 smtp_user=${smtp_user:-""}
 smtp_pass=${smtp_pass:-""}
