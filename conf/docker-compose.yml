@@ -1,23 +1,46 @@
 version: "3.9"
 services:
-  documenso:
-    image: documenso/documenso:latest
-    container_name: documenso__APP__
-    restart: unless-stopped
+  database:
+    image: postgres:15
     environment:
-      - WORKDIR=/data
-      - APP_URL=__APP_URL__
-      - SMTP_HOST=__SMTP_HOST__
-      - SMTP_PORT=__SMTP_PORT__
-      - SMTP_USER=__SMTP_USER__
-      - SMTP_PASS=__SMTP_PASS__
-      - SMTP_FROM=__SMTP_FROM__
+      - POSTGRES_USER=__DB_USER__
+      - POSTGRES_PASSWORD=__DB_PASS__
+      - POSTGRES_DB=__DB_NAME__
     healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:3000/health"]
-      interval: 30s
+      test: ["CMD-SHELL", "pg_isready -U __DB_USER__"]
+      interval: 10s
       timeout: 5s
       retries: 5
     volumes:
-      - __DATA_DIR__:/data
+      - __DATA_DIR__/db:/var/lib/postgresql/data
+
+  documenso:
+    image: documenso/documenso:latest
+    container_name: documenso__APP__
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - PORT=3000
+      - NEXTAUTH_SECRET=__NEXTAUTH_SECRET__
+      - NEXT_PRIVATE_ENCRYPTION_KEY=__ENC_KEY__
+      - NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY=__ENC_KEY2__
+      - NEXT_PUBLIC_WEBAPP_URL=__APP_URL__
+      - NEXT_PRIVATE_INTERNAL_WEBAPP_URL=http://127.0.0.1:__APP_PORT__
+      - NEXT_PRIVATE_DATABASE_URL=postgres://__DB_USER__:__DB_PASS__@database:5432/__DB_NAME__
+      - NEXT_PRIVATE_DIRECT_DATABASE_URL=postgres://__DB_USER__:__DB_PASS__@database:5432/__DB_NAME__
+      - NEXT_PUBLIC_UPLOAD_TRANSPORT=database
+      - NEXT_PRIVATE_SMTP_TRANSPORT=__SMTP_TRANSPORT__
+      - NEXT_PRIVATE_SMTP_HOST=__SMTP_HOST__
+      - NEXT_PRIVATE_SMTP_PORT=__SMTP_PORT__
+      - NEXT_PRIVATE_SMTP_USERNAME=__SMTP_USER__
+      - NEXT_PRIVATE_SMTP_PASSWORD=__SMTP_PASS__
+      - NEXT_PRIVATE_SMTP_FROM_NAME=__SMTP_FROM_NAME__
+      - NEXT_PRIVATE_SMTP_FROM_ADDRESS=__SMTP_FROM_ADDRESS__
+      - NEXT_PUBLIC_DISABLE_SIGNUP=__DISABLE_SIGNUP__
+      - NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH=__SIGNING_FILE__
+      - NEXT_PRIVATE_SIGNING_PASSPHRASE=__SIGNING_PASSPHRASE__
     ports:
       - "127.0.0.1:__APP_PORT__:3000"
+    volumes:
+      - __DATA_DIR__/cert.p12:/opt/documenso/cert.p12:ro

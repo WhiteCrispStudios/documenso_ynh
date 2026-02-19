@@ -5,17 +5,23 @@ source /usr/share/yunohost/helpers
 
 app=${app:?}
 
+smtp_transport=${smtp_transport:-}
 smtp_host=${smtp_host:-}
 smtp_port=${smtp_port:-}
 smtp_user=${smtp_user:-}
 smtp_pass=${smtp_pass:-}
-smtp_from=${smtp_from:-}
+smtp_from_name=${smtp_from_name:-}
+smtp_from_address=${smtp_from_address:-}
+disable_signup=${disable_signup:-}
 
-ynh_app_setting_set --app="$app" --key=smtp_host --value="${smtp_host:-}"
-ynh_app_setting_set --app="$app" --key=smtp_port --value="${smtp_port:-}"
-ynh_app_setting_set --app="$app" --key=smtp_user --value="${smtp_user:-}"
-ynh_app_setting_set --app="$app" --key=smtp_pass --value="${smtp_pass:-}"
-ynh_app_setting_set --app="$app" --key=smtp_from --value="${smtp_from:-}"
+if [ -n "$smtp_transport" ]; then ynh_app_setting_set --app="$app" --key=smtp_transport --value="${smtp_transport}"; fi
+if [ -n "$smtp_host" ]; then ynh_app_setting_set --app="$app" --key=smtp_host --value="${smtp_host}"; fi
+if [ -n "$smtp_port" ]; then ynh_app_setting_set --app="$app" --key=smtp_port --value="${smtp_port}"; fi
+if [ -n "$smtp_user" ]; then ynh_app_setting_set --app="$app" --key=smtp_user --value="${smtp_user}"; fi
+if [ -n "$smtp_pass" ]; then ynh_app_setting_set --app="$app" --key=smtp_pass --value="${smtp_pass}"; fi
+if [ -n "$smtp_from_name" ]; then ynh_app_setting_set --app="$app" --key=smtp_from_name --value="${smtp_from_name}"; fi
+if [ -n "$smtp_from_address" ]; then ynh_app_setting_set --app="$app" --key=smtp_from_address --value="${smtp_from_address}"; fi
+if [ -n "$disable_signup" ]; then ynh_app_setting_set --app="$app" --key=disable_signup --value="${disable_signup}"; fi
 
 install_dir=$(ynh_app_setting_get --app="$app" --key=install_dir)
 app_domain=$(ynh_app_setting_get --app="$app" --key=domain)
@@ -26,22 +32,44 @@ if [ -z "$app_path" ]; then app_path="/"; fi
 data_dir=$(ynh_app_setting_get --app="$app" --key=data_dir)
 app_url="https://${app_domain}${app_path}"
 
-smtp_host=${smtp_host:-}
-smtp_port=${smtp_port:-}
-smtp_user=${smtp_user:-}
-smtp_pass=${smtp_pass:-}
-smtp_from=${smtp_from:-}
+DB_USER=$(ynh_app_setting_get --app="$app" --key=db_user)
+DB_NAME=$(ynh_app_setting_get --app="$app" --key=db_name)
+DB_PASS=$(ynh_app_setting_get --app="$app" --key=db_pass)
+NEXTAUTH_SECRET=$(ynh_app_setting_get --app="$app" --key=nextauth_secret)
+ENC_KEY=$(ynh_app_setting_get --app="$app" --key=enc_key)
+ENC_KEY2=$(ynh_app_setting_get --app="$app" --key=enc_key2)
+SIGNING_PASSPHRASE=$(ynh_app_setting_get --app="$app" --key=signing_pass)
+
+smtp_transport=$(ynh_app_setting_get --app="$app" --key=smtp_transport)
+smtp_host=$(ynh_app_setting_get --app="$app" --key=smtp_host)
+smtp_port=$(ynh_app_setting_get --app="$app" --key=smtp_port)
+smtp_user=$(ynh_app_setting_get --app="$app" --key=smtp_user)
+smtp_pass=$(ynh_app_setting_get --app="$app" --key=smtp_pass)
+smtp_from_name=$(ynh_app_setting_get --app="$app" --key=smtp_from_name)
+smtp_from_address=$(ynh_app_setting_get --app="$app" --key=smtp_from_address)
+disable_signup=$(ynh_app_setting_get --app="$app" --key=disable_signup)
 
 cat ../conf/docker-compose.yml \
   | sed "s#__APP__#${app}#g" \
   | sed "s#__APP_URL__#${app_url}#g" \
   | sed "s#__DATA_DIR__#${data_dir}#g" \
   | sed "s#__APP_PORT__#${app_port}#g" \
+  | sed "s#__DB_USER__#${DB_USER}#g" \
+  | sed "s#__DB_PASS__#${DB_PASS}#g" \
+  | sed "s#__DB_NAME__#${DB_NAME}#g" \
+  | sed "s#__NEXTAUTH_SECRET__#${NEXTAUTH_SECRET}#g" \
+  | sed "s#__ENC_KEY__#${ENC_KEY}#g" \
+  | sed "s#__ENC_KEY2__#${ENC_KEY2}#g" \
+  | sed "s#__SMTP_TRANSPORT__#${smtp_transport}#g" \
   | sed "s#__SMTP_HOST__#${smtp_host}#g" \
   | sed "s#__SMTP_PORT__#${smtp_port}#g" \
   | sed "s#__SMTP_USER__#${smtp_user}#g" \
   | sed "s#__SMTP_PASS__#${smtp_pass}#g" \
-  | sed "s#__SMTP_FROM__#${smtp_from}#g" \
+  | sed "s#__SMTP_FROM_NAME__#${smtp_from_name}#g" \
+  | sed "s#__SMTP_FROM_ADDRESS__#${smtp_from_address}#g" \
+  | sed "s#__DISABLE_SIGNUP__#${disable_signup}#g" \
+  | sed "s#__SIGNING_FILE__#/opt/documenso/cert.p12#g" \
+  | sed "s#__SIGNING_PASSPHRASE__#${SIGNING_PASSPHRASE}#g" \
   > "$install_dir/docker-compose.yml"
 
 cd "$install_dir"

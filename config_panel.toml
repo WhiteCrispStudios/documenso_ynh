@@ -1,10 +1,15 @@
 version = "1.0"
 
 [main]
-name = "Docuseal"
+name = "Documenso"
 
     [main.smtp]
     name = "SMTP"
+
+        [main.smtp.smtp_transport]
+        ask = "SMTP Transport (smtp-auth | smtp-api | mailchannels)"
+        type = "string"
+        optional = true
 
         [main.smtp.smtp_host]
         ask = "SMTP Host (z. B. localhost)"
@@ -26,7 +31,20 @@ name = "Docuseal"
         type = "password"
         optional = true
 
-        [main.smtp.smtp_from]
+        [main.smtp.smtp_from_name]
+        ask = "Absendername (From Name)"
+        type = "string"
+        optional = true
+
+        [main.smtp.smtp_from_address]
         ask = "Absenderadresse (From)"
+        type = "string"
+        optional = true
+
+    [main.signup]
+    name = "Signup"
+
+        [main.signup.disable_signup]
+        ask = "Registrierung deaktivieren? (true/false)"
         type = "string"
         optional = true

@@ -1,1 +1,1 @@
-Admin : Docuseal s'exécute dans Docker. Configuration via le panneau YunoHost (SMTP).
+Admin : Documenso s'exécute dans Docker. Configuration via le panneau YunoHost (SMTP).

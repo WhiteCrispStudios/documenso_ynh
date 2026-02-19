@@ -1,1 +1,1 @@
-Admin: Docuseal läuft in Docker. Konfiguration über das YunoHost-Config-Panel (SMTP).
+Admin: Documenso läuft in Docker. Konfiguration über das YunoHost-Config-Panel (SMTP).
