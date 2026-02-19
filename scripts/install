@@ -59,7 +59,11 @@ ynh_app_setting_set --app="$app" --key=smtp_from_name --value="${smtp_from_name:
 ynh_app_setting_set --app="$app" --key=smtp_from_address --value="${smtp_from_address:-}"
 ynh_app_setting_set --app="$app" --key=disable_signup --value="${disable_signup:-}"
 
-app_url="https://${app_domain}${app_path}"
+if [ "$app_path" = "/" ]; then
+  app_url="https://${app_domain}"
+else
+  app_url="https://${app_domain}${app_path}"
+fi
 
 # generate signing cert (self-signed)
 if [ ! -f "$data_dir/cert.p12" ]; then

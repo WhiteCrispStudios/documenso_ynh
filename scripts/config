@@ -30,7 +30,11 @@ app_port=$(ynh_app_setting_get --app="$app" --key=port)
 app_path=${app_path%/}
 if [ -z "$app_path" ]; then app_path="/"; fi
 data_dir=$(ynh_app_setting_get --app="$app" --key=data_dir)
-app_url="https://${app_domain}${app_path}"
+if [ "$app_path" = "/" ]; then
+  app_url="https://${app_domain}"
+else
+  app_url="https://${app_domain}${app_path}"
+fi
 
 DB_USER=$(ynh_app_setting_get --app="$app" --key=db_user)
 DB_NAME=$(ynh_app_setting_get --app="$app" --key=db_name)
